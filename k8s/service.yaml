@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bci-eeg-service
+  namespace: bci-eeg
+  labels:
+    app: bci-eeg-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8501
+    protocol: TCP
+    name: http
+  selector:
+    app: bci-eeg-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bci-eeg-internal
+  namespace: bci-eeg
+  labels:
+    app: bci-eeg-app
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8501
+    targetPort: 8501
+    protocol: TCP
+    name: http
+  selector:
+    app: bci-eeg-app
