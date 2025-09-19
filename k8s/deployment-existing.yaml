@@ -23,13 +23,11 @@ spec:
           name: http
         resources:
           requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
             memory: "2Gi"
             cpu: "1000m"
-            nvidia.com/gpu: 1
-          limits:
-            memory: "4Gi"
-            cpu: "2000m"
-            nvidia.com/gpu: 1
         env:
         - name: PYTHONUNBUFFERED
           value: "1"
@@ -57,17 +55,3 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
           failureThreshold: 3
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
-      nodeSelector:
-        kubernetes.io/os: linux
-      tolerations:
-      - key: "sku"
-        operator: "Equal"
-        value: "gpu"
-        effect: "NoSchedule"
-      - key: "nvidia.com/gpu"
-        operator: "Exists"
-        effect: "NoSchedule"
