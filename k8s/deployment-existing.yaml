@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bci-eeg-app
+  namespace: bci-eeg
+  labels:
+    app: bci-eeg-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bci-eeg-app
+  template:
+    metadata:
+      labels:
+        app: bci-eeg-app
+    spec:
+      containers:
+      - name: bci-eeg-app
+        image: bcieegacr1758269708.azurecr.io/bci-eeg:latest
+        ports:
+        - containerPort: 8501
+          name: http
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: STREAMLIT_SERVER_ADDRESS
+          value: "0.0.0.0"
+        - name: STREAMLIT_SERVER_PORT
+          value: "8501"
+        - name: STREAMLIT_SERVER_HEADLESS
+          value: "true"
+        - name: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+          value: "false"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8501
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3

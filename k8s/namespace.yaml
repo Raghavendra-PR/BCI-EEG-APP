@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bci-eeg
+  labels:
+    name: bci-eeg
+    app: bci-eeg-app
